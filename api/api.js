@@ -45,7 +45,6 @@ api.get("/test", (req, res) => {
 // 404 handling
 
 api.use((req, res) => {
-
 	res.status(404).json({
 		"data": "404: Not found"
 	})

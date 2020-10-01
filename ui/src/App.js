@@ -1,30 +1,35 @@
 import React, { Component } from "react";
 import './App.css';
 
-class Main extends Component {
+class Page extends Component {
 	constructor(props) {
 		super();
-		this.state = {
-			message: ""
-		}
-	}
-
-	componentDidMount() {
-		fetch("http://localhost:3001")
-			.then(res => res.json())
-			.then(data => {
-				this.setState({ message: data.message });
-			});
+		this.setState({ title: props.title });
 	};
 
 	render() {
 		return (
-			<h1>{this.state.message}</h1>
+			<div>
+				<h2>{this.state.title}</h2>
+			</div>
 		);
-	}
-}
+	};
+};
 
 export default class App extends Component {
+	constructor() {
+		super();
+		this.setState({ data: {} });
+	};
+
+	componentDidMount() {
+		fetch("http://localhost:8888/test")
+			.then(res => res.json())
+			.then(data => {
+				this.setState({ data: data.data });
+			});
+	};
+
 	render() {
 		return (
 			<div class="main">
@@ -36,13 +41,9 @@ export default class App extends Component {
 					</div>
 				</div>
 
-				<Main />
+				<Page title={this.state.data} />
 
 				<div id="footer" class="flex">
-					<span>
-						<a href="/" class="link">Home</a>
-						<a href="/commande" class="link">Commander</a>
-					</span>
 					<span>
 						<p class="notimportant" id="copyright">© 2020 Valentin Fleurit</p>
 					</span>
