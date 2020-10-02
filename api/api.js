@@ -9,6 +9,8 @@ const api = express();
 api.use(cors());
 api.use(parser.urlencoded({ extended: false }));
 
+const db = require("db");
+
 // response class used to generate a proper response (json)
 
 class Connection {
@@ -32,14 +34,13 @@ api.use((req, res, next) => {
 
 api.get("/", (req, res) => {
 	res.status(200).json({
-		"data": "This is home ^^"
+		"message": "Appp's api"
 	});
 });
 
-api.get("/test", (req, res) => {
-	res.status(200).json({
-		"data": "It works !!!"
-	});
+api.get("/users", (req, res) => {
+
+	res.status(200).json();
 });
 
 // 404 handling
