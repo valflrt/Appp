@@ -7,7 +7,7 @@ function query(queryStr, queryVars) {
 			host: "localhost",
 			user: "root",
 			password: "AA_aa_11_#@",
-			database: "DB"
+			database: "Appp"
 		});
 
 		queryVars = queryVars || [];

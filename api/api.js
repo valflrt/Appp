@@ -9,23 +9,17 @@ const api = express();
 api.use(cors());
 api.use(parser.urlencoded({ extended: false }));
 
-const db = require("db");
+const db = require("./db");
+const shemas = require("./shemas");
 
-// response class used to generate a proper response (json)
+const sanitize = require("./sanitize");
 
-class Connection {
-	constructor(props) {
-		this.path = props.path || undefined;
-		this.method = props.method || undefined;
-		this.query = props.body || undefined;
-		this.ip = props.ip.split(":").pop() || undefined;
-	};
-};
+const classes = require("./classes");
 
 // log every request
 
 api.use((req, res, next) => {
-	let request = new Connection(req);
+	let request = new classes.Connection(req);
 	console.log(request);
 	next();
 });
@@ -33,14 +27,41 @@ api.use((req, res, next) => {
 // routes
 
 api.get("/", (req, res) => {
-	res.status(200).json({
+	res.status(100).json({
 		"message": "Appp's api"
 	});
 });
 
 api.get("/users", (req, res) => {
+	db.query("SELECT * FROM users")
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+});
 
-	res.status(200).json();
+api.post("/users/add", (req, res) => {
+
+	let { name, password, email } = req.query;
+
+	let user = new classes.User({
+		name: name,
+		password: password,
+		email: email
+	});
+
+	console.log(user);
+
+	shemas.addUser(user)
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+
 });
 
 // 404 handling
@@ -48,7 +69,7 @@ api.get("/users", (req, res) => {
 api.use((req, res) => {
 	res.status(404).json({
 		"data": "404: Not found"
-	})
+	});
 });
 
 // listenning

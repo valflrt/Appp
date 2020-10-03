@@ -1,20 +1,20 @@
-const database = require('./db')
+const database = require('./db');
+const toolbox = require("./tb")
 
-exports.createDish = (dish) => {
+exports.addUser = (user) => {
 	return new Promise(function (resolve, reject) {
 
-		let { id, name, description, format } = dish;
+		let { id, name, password } = user;
+		let email = user.email || null;
 
-		database.query("INSERT INTO dishes (id, name, description, image) VALUES (?, ?, ?, ?)", [id, name, description, id + "." + format])
+		database.query("INSERT INTO users (id, name, password, email) VALUES (?, ?, ?, ?)", [id, name, password, email])
 			.catch((err) => {
 				if (err) {
-					console.log(err)
+					console.log(err);
 					return reject(err);
-				};
-				resolve(result);
-			})
+				} else {
+					return resolve(result);
+				}
+			});
 	});
 };
-
-/* apres par exemple ça c'est un petit programme pour inserer un nouveau "plat" dans la base
-*/
