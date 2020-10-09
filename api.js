@@ -28,12 +28,14 @@ api.use((req, res, next) => {
 
 api.get("/", (req, res) => {
 	res.status(100).json({
-		"message": "Appp's api"
+		message: "Appp's api"
 	});
 });
 
+// get all users
+
 api.get("/users", (req, res) => {
-	db.query("SELECT * FROM users")
+	db.query("SELECT id, name FROM users")
 		.then((result) => {
 			res.status(200).json(result);
 		})
@@ -42,7 +44,9 @@ api.get("/users", (req, res) => {
 		});
 });
 
-api.post("/users/add", (req, res) => {
+// create a new user
+
+api.post("/users", (req, res) => {
 
 	let { name, password, email } = req.query;
 
@@ -54,13 +58,55 @@ api.post("/users/add", (req, res) => {
 
 	console.log(user);
 
-	shemas.addUser(user)
-		.then((result) => {
-			res.status(200).json(result);
-		})
-		.catch((err) => {
-			res.status(500).json(err);
-		});
+	if (user.isSuitable === true) {
+		shemas.addUser(user)
+			.then((result) => {
+				res.status(200).json({
+					status: "user created and added successfully",
+					user: user,
+					databaseMessage: result
+				});
+			})
+			.catch((err) => {
+				res.status(500).json({
+					error: "error while adding the user",
+					databaseMessage: err
+				});
+			});
+	} else {
+		res.status(406).json(user.warns);
+	};
+
+});
+
+api.put("/users/:id", (req, res) => {
+
+	let { name, password, email } = req.query;
+
+	let user = new classes.updatingUser({
+		name: name,
+		password: password,
+		email: email
+	});
+
+	if (user.isSuitable === true) {
+		shemas.updateUser(user, req.params.id)
+			.then((result) => {
+				res.status(200).json({
+					status: "user updated successfully",
+					user: user,
+					databaseMessage: result
+				});
+			})
+			.catch((err) => {
+				res.status(500).json({
+					error: "error while updating the user",
+					databaseMessage: err
+				});
+			});
+	} else {
+		res.status(406).json(user.warns);
+	};
 
 });
 
@@ -68,7 +114,7 @@ api.post("/users/add", (req, res) => {
 
 api.use((req, res) => {
 	res.status(404).json({
-		"data": "404: Not found"
+		data: "404: Not found"
 	});
 });
 

@@ -17,15 +17,44 @@ const sanitize = require("./sanitize");
 
 module.exports.User = class User {
 	constructor(user) {
-		let sanitizedUser = sanitize.user(user)
+
+		let sanitizedUser = sanitize.user(user);
+
 		this.findId();
-		this = sanitizedUser;
+
+		this.isSuitable = sanitizedUser.isSuitable;
+
+		if (sanitizedUser.isSuitable === true) {
+			this.name = sanitizedUser.name;
+			this.password = sanitizedUser.password;
+			this.email = sanitizedUser.email;
+		} else {
+			this.warns = sanitizedUser.warns;
+		}
+
 	};
 
 	findId() {
 		this.id = toolbox.alphanum(16);
 		while (sanitize.id(this.id) === false) {
 			this.id = toolbox.alphanum(16);
+		};
+	};
+
+};
+
+module.exports.updatingUser = class updatingUser {
+	constructor(user) {
+		let sanitizedUser = sanitize.userUpdating(user);
+
+		this.isSuitable = sanitizedUser.isSuitable;
+
+		if (sanitizedUser.isSuitable === true) {
+			this.name = sanitizedUser.name;
+			this.password = sanitizedUser.password;
+			this.email = sanitizedUser.email;
+		} else {
+			this.warns = sanitizedUser.warns;
 		};
 	};
 };

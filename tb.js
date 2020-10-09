@@ -1,7 +1,7 @@
 exports.alphanum = function (length) {
 	let string = "";
-	for( ; string.length < length; string += Math.random().toString(36).substr(2));
-	return  string.substr(0, length);
+	for (; string.length < length; string += Math.random().toString(36).substr(2));
+	return string.substr(0, length);
 };
 
 exports.isEmail = (input) => {
