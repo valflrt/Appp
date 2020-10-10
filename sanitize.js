@@ -90,20 +90,13 @@ module.exports.user = (user) => {
 // user updating sanitization
 
 module.exports.userUpdating = (user) => {
-	const encryption = require("./encryption");
 
 	let warns = [];
 
 	// username verification
 
 	if (user.name) {
-		if (user.name.length > 100) {
-			warns.push({
-				name: "USERNAME",
-				type: "LENGTH",
-				problem: "The name must contain less than 100 characters"
-			});
-		};
+
 	}
 
 	// password verification
@@ -166,7 +159,6 @@ module.exports.userUpdating = (user) => {
 	}
 
 	// sanitized data returned
-	//c ça
 
 	return {
 		name: user.name,
@@ -192,14 +184,5 @@ module.exports.userUpdating = (user) => {
 // user id sanitization
 
 module.exports.id = (id) => {
-	let database = require("./db");
 
-	database.query("SELECT * FROM users WHERE id = ?", [id])
-		.then((result) => {
-			if (result.length !== 0) {
-				return true;
-			} else {
-				return false;
-			}
-		});
 };

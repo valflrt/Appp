@@ -5,8 +5,8 @@ exports.addUser = (user) => {
 
 	return new Promise(function (resolve, reject) {
 
-		let { id, name, password } = user;
-		let email = user.email || null;
+		let id = "CONCAT(CHAR(FLOOR(RAND()*26)+65),FLOOR(100+RAND()*(500-100)))"
+		let { name, password, email } = user;
 
 		database.query("INSERT INTO users (id, name, password, email) VALUES (?, ?, ?, ?)", [id, name, password, email])
 			.then((result) => {

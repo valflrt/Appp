@@ -16,6 +16,8 @@ const sanitize = require("./sanitize");
 
 const classes = require("./classes");
 
+const User = require("./user")
+
 // log every request
 
 api.use((req, res, next) => {
@@ -48,17 +50,17 @@ api.get("/users", (req, res) => {
 
 api.post("/users", (req, res) => {
 
-	let { name, password, email } = req.query;
+	let { username, password, email } = req.query;
 
-	let user = new classes.User({
-		name: name,
+	let user = new User({
+		username: username,
 		password: password,
 		email: email
 	});
 
 	console.log(user);
 
-	if (user.isSuitable === true) {
+	if (user.isSuitable() === true) {
 		shemas.addUser(user)
 			.then((result) => {
 				res.status(200).json({
