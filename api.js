@@ -10,7 +10,8 @@ api.use(cors());
 api.use(parser.urlencoded({ extended: false }));
 
 const db = require("./db");
-const shemas = require("./shemasDB");
+
+const shemas = require("./dbShemas");
 
 const classes = require("./classes");
 
@@ -99,24 +100,27 @@ api.put("/users/update/:id", (req, res) => {
 
 	let { username, password, email } = req.query;
 
+	console.log(email);
+
 	let user = new User({
 		username: username,
 		password: password,
-		email: email
+		email: email,
+		updating: true
 	});
 
 	if (user.isSuitable() === true) {
-		shemas.addUser(user)
+		shemas.updateUser(user)
 			.then((result) => {
 				res.status(200).json({
-					status: "user created and added successfully",
+					status: "user updated successfully",
 					user: user,
 					databaseMessage: result
 				});
 			})
 			.catch((err) => {
 				res.status(500).json({
-					error: "error while adding the user",
+					error: "error while updating the user",
 					databaseMessage: err
 				});
 			});

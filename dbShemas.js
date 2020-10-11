@@ -27,8 +27,8 @@ exports.updateUser = (user, id) => {
 		let results = [];
 		let errors = [];
 
-		if (user.name) {
-			database.query("UPDATE users SET username = ? WHERE id = ?", [user.name, id])
+		if (user.name !== null) {
+			database.query("UPDATE users SET username = ? WHERE id = ?", [user.username, id])
 				.then((result) => {
 					results.push(result);
 				})
@@ -37,7 +37,7 @@ exports.updateUser = (user, id) => {
 				});
 		}
 
-		if (user.password) {
+		if (user.password !== null) {
 			database.query("UPDATE users SET password = ? WHERE id = ?", [user.password, id])
 				.then((result) => {
 					results.push(result);
@@ -47,7 +47,7 @@ exports.updateUser = (user, id) => {
 				});
 		}
 
-		if (user.email) {
+		if (user.email !== null) {
 			database.query("UPDATE users SET email = ? WHERE id = ?", [user.email, id])
 				.then((result) => {
 					results.push(result);
