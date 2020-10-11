@@ -1,6 +1,6 @@
 // password encryption module
 
-const encryption = require("./encryption");
+const encryption = require("../encryption");
 
 // user class
 
@@ -54,7 +54,11 @@ module.exports = class User {
 			});
 		};
 
-		this.username = username;
+		try {
+			this.username = username;
+		} catch (err) {
+			this.pushWarn(err);
+		};
 	};
 
 	// function to set password
@@ -76,7 +80,11 @@ module.exports = class User {
 			});
 		};
 
-		this.password = encryption.hash(password);
+		try {
+			this.password = encryption.hash(password);
+		} catch (err) {
+			this.pushWarn(err);
+		};
 	};
 
 	// function to set email
@@ -106,7 +114,11 @@ module.exports = class User {
 			});
 		};
 
-		this.email = email;
+		try {
+			this.email = email;
+		} catch (err) {
+			this.pushWarn(err);
+		};
 	};
 
 	// function to add a warn to the warns array

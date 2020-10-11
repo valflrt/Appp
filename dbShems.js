@@ -5,10 +5,10 @@ exports.addUser = (user) => {
 
 	return new Promise(function (resolve, reject) {
 
-		let id = "CONCAT(CHAR(FLOOR(RAND()*26)+65),FLOOR(100+RAND()*(500-100)))"
-		let { name, password, email } = user;
+		let id = ""
+		let { username, password, email } = user;
 
-		database.query("INSERT INTO users (id, name, password, email) VALUES (?, ?, ?, ?)", [id, name, password, email])
+		database.query("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", [username, password, email])
 			.then((result) => {
 				return resolve(result);
 			})
@@ -28,7 +28,7 @@ exports.updateUser = (user, id) => {
 		let errors = [];
 
 		if (user.name) {
-			database.query("UPDATE users SET name = ? WHERE id = ?", [user.name, id])
+			database.query("UPDATE users SET username = ? WHERE id = ?", [user.name, id])
 				.then((result) => {
 					results.push(result);
 				})
