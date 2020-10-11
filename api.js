@@ -16,7 +16,7 @@ const sanitize = require("./sanitize");
 
 const classes = require("./classes");
 
-const createUser = require("./shemas/create")
+const createUser = require("./shemas/user")
 
 // log every request
 
