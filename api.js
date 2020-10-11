@@ -10,13 +10,11 @@ api.use(cors());
 api.use(parser.urlencoded({ extended: false }));
 
 const db = require("./db");
-const shemas = require("./dbShems");
-
-const sanitize = require("./sanitize");
+const shemas = require("./shemasDB");
 
 const classes = require("./classes");
 
-const createUser = require("./shemas/user")
+const User = require("./shemas/user")
 
 // log every request
 
@@ -52,7 +50,7 @@ api.post("/users", (req, res) => {
 
 	let { username, password, email } = req.query;
 
-	let user = new createUser({
+	let user = new User({
 		username: username,
 		password: password,
 		email: email
