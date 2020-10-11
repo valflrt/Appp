@@ -14,7 +14,7 @@ const shemas = require("./shemasDB");
 
 const classes = require("./classes");
 
-const User = require("./shemas/user")
+const User = require("./user");
 
 // log every request
 
@@ -35,7 +35,21 @@ api.get("/", (req, res) => {
 // get all users
 
 api.get("/users", (req, res) => {
-	db.query("SELECT id, name FROM users")
+	db.query("SELECT id, username FROM users")
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((err) => {
+			res.status(500).json(err);
+		});
+});
+
+// get info about on user
+
+api.get("/users/:name", (req, res) => {
+	let name = req.params.name;
+
+	db.query("SELECT id, username FROM users WHERE id = ? OR username = ?", [name, name])
 		.then((result) => {
 			res.status(200).json(result);
 		})
@@ -46,7 +60,7 @@ api.get("/users", (req, res) => {
 
 // create a new user
 
-api.post("/users", (req, res) => {
+api.post("/users/add", (req, res) => {
 
 	let { username, password, email } = req.query;
 
@@ -79,28 +93,30 @@ api.post("/users", (req, res) => {
 
 });
 
-api.put("/users/:id", (req, res) => {
+// update an user
 
-	let { name, password, email } = req.query;
+api.put("/users/update/:id", (req, res) => {
 
-	let user = new classes.updatingUser({
-		name: name,
+	let { username, password, email } = req.query;
+
+	let user = new User({
+		username: username,
 		password: password,
 		email: email
 	});
 
-	if (user.isSuitable === true) {
-		shemas.updateUser(user, req.params.id)
+	if (user.isSuitable() === true) {
+		shemas.addUser(user)
 			.then((result) => {
 				res.status(200).json({
-					status: "user updated successfully",
+					status: "user created and added successfully",
 					user: user,
 					databaseMessage: result
 				});
 			})
 			.catch((err) => {
 				res.status(500).json({
-					error: "error while updating the user",
+					error: "error while adding the user",
 					databaseMessage: err
 				});
 			});
